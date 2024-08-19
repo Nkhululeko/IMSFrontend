@@ -1,0 +1,21 @@
+.remove-inventory-card {
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+.remove-inventory-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.remove-inventory-actions {
+  margin-top: 20px;
+}
+
+.mat-success {
+  color: green;
+}
+
+.mat-error {
+  color: red;
+}
