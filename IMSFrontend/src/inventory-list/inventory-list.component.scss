@@ -1,6 +1,24 @@
 .inventory-list-card {
+  text-align: center;
+  padding: 20px;
   max-width: 1000px;
   margin: 20px auto;
+  
+}
+.inventory-list-card {
+  width: 100%; /* Ensures the card takes the full width of its container */
+}
+
+.inventory-list-card mat-card-header {
+  display: flex;
+  justify-content: center; /* Centers the title horizontally */
+  align-items: center; /* Centers the title vertically, if needed */
+}
+
+.inventory-list-card mat-card-title {
+  text-align: center; /* Ensures the text itself is centered */
+  font-weight: bold;
+  margin: 0; /* Resets any default margin */
 }
 
 .mat-table {

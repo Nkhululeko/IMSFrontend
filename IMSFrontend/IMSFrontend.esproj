@@ -7,4 +7,13 @@
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\IMSFrontend\</BuildOutputFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="src\NewFolder1\**" />
+    <None Remove="src\NewFolder\**" />
+    <TypeScriptConfiguration Remove="src\NewFolder1\**" />
+    <TypeScriptConfiguration Remove="src\NewFolder\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\environments\" />
+  </ItemGroup>
 </Project>

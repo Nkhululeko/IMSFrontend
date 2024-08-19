@@ -15,13 +15,13 @@ export class RemoveInventoryComponent {
 
   onDelete(): void {
     if (this.partNumber) {
-      this.inventoryService.deleteInventory(this.partNumber).subscribe(
-          (        response: any) => {
+      this.inventoryService['deleteInventoryByPartNumber'](this.partNumber).subscribe(
+        (response: any) => {
           this.successMessage = 'Inventory item removed successfully.';
           this.errorMessage = null;
           this.partNumber = ''; // Clear input field
         },
-          (        error: any) => {
+        (error: any) => {
           this.errorMessage = 'Failed to remove inventory item.';
           this.successMessage = null;
         }
@@ -29,3 +29,4 @@ export class RemoveInventoryComponent {
     }
   }
 }
+

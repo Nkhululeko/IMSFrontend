@@ -1,10 +1,12 @@
-<nav>
-  <a routerLink="/login">Login</a>
-  <a routerLink="/dashboard">Dashboard</a>
-  <a routerLink="/inventory-list">Inventory List</a>
-  <a routerLink="/remove-inventory">Remove Inventory</a>
-  <a routerLink="/order-management">Order Management</a>
-  <a routerLink="/reports">Reports</a>
-  <a routerLink="/user-management">User Management</a>
+<nav class="navbar">
+  <ul class="nav-list">
+    <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
+    <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+    <li><a routerLink="/inventory-list" routerLinkActive="active">Inventory List</a></li>
+    <li><a routerLink="/remove-inventory" routerLinkActive="active">Remove Inventory</a></li>
+    <li><a routerLink="/order-management" routerLinkActive="active">Order Management</a></li>
+    <li><a routerLink="/reports" routerLinkActive="active">Reports</a></li>
+    <li><a routerLink="/user-management" routerLinkActive="active">User Management</a></li>
+  </ul>
 </nav>
 <router-outlet></router-outlet>

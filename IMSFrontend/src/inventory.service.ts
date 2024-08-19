@@ -6,13 +6,16 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class InventoryService {
-  [x: string]: any;
   private apiUrl = 'http://localhost:3000/api/inventory';
 
   constructor(private http: HttpClient) { }
 
   getInventory(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
+  }
+
+  getInventoryById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
   addInventory(item: any): Observable<any> {
@@ -27,3 +30,4 @@ export class InventoryService {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
 }
+

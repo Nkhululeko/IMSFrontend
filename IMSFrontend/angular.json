@@ -111,5 +111,11 @@
   },
   "cli": {
     "analytics": "168e49b1-fe08-468d-b060-8f4ac5aa9550"
-  }
+  },
+  "fileReplacements": [
+    {
+      "replace": "src/environments/environment.ts",
+      "with": "src/environments/environment.prod.ts"
+    }
+  ]
 }
