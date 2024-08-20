@@ -21,10 +21,10 @@ export class DashboardComponent implements OnInit {
 
   loadDashboardData(): void {
     // Load stats, activities, and alerts here
-    this.totalInventory = 100; // Example data
-    this.lowStockAlerts = 5; // Example data
-    this.totalOrders = 50; // Example data
-    this.pendingOrders = 10; // Example data
+    this.totalInventory = 100; 
+    this.lowStockAlerts = 5; 
+    this.totalOrders = 50; 
+    this.pendingOrders = 10; 
 
     this.recentActivities = [
       { title: 'Order #1234 processed', date: new Date() },

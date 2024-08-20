@@ -38,7 +38,7 @@ namespace IMSBackend.Models
             [Required]
             public DateTime CreatedAt { get; set; }
 
-            public DateTime? UpdatedAt { get; set; }
+          
     }
 }
 

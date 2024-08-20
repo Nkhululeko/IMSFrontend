@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { InventoryService } from '../inventory.service';
+import { HttpClient } from '@angular/common/http';
+import { MatTableDataSource } from '@angular/material/table';
+import { Inventory } from '../models';
+
 
 @Component({
   selector: 'app-inventory-list',
@@ -7,22 +10,22 @@ import { InventoryService } from '../inventory.service';
   styleUrls: ['./inventory-list.component.scss']
 })
 export class InventoryListComponent implements OnInit {
-  inventoryItems: any[] = [];
-  displayedColumns: string[] = ['partNumber', 'partName', 'quantity', 'price'];
+  dataSource = new MatTableDataSource<Inventory>(); // Use MatTableDataSource
+  displayedColumns: string[] = ['part_number', 'part_name', 'quantity', 'price'];
 
-  constructor(private inventoryService: InventoryService) { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     this.loadInventory();
   }
 
   loadInventory(): void {
-    this.inventoryService['getInventory']().subscribe(
-        (      data: any[]) => {
-        this.inventoryItems = data;
+    this.http.get<Inventory[]>('http://localhost:40080/api/inventory').subscribe(
+      data => {
+        this.dataSource.data = data; // Set the data to dataSource
       },
-        (      error: any) => {
-        console.error('Error fetching inventory data', error);
+      error => {
+        console.error('Error loading inventory data', error);
       }
     );
   }

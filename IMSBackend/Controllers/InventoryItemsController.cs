@@ -10,8 +10,8 @@ using IMSBackend.Models;
 
 namespace IMSBackend.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class InventoryItemsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -61,7 +61,7 @@ namespace IMSBackend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PartName,PartNumber,Quantity,Price,SupplierId,CategoryId,CreatedAt,UpdatedAt")] InventoryItem inventoryItem)
+        public async Task<IActionResult> Create([Bind("Id,PartName,PartNumber,Quantity,Price,SupplierId,CategoryId,CreatedAt")] InventoryItem inventoryItem)
         {
             if (ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace IMSBackend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PartName,PartNumber,Quantity,Price,SupplierId,CategoryId,CreatedAt,UpdatedAt")] InventoryItem inventoryItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,PartName,PartNumber,Quantity,Price,SupplierId,CategoryId,CreatedAt")] InventoryItem inventoryItem)
         {
             if (id != inventoryItem.Id)
             {

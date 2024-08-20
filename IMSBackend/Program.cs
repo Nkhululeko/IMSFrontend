@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<DbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
         "Server=localhost;Port=3306;Database=car_parts_business_db;User=root;Password=nkhulu22;",
         new MySqlServerVersion(new Version(8, 0, 21)),

@@ -10,8 +10,8 @@ using IMSBackend.Models;
 
 namespace IMSBackend.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class StockMovementsController : Controller
     {
         private readonly ApplicationDbContext _context;

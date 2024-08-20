@@ -23,8 +23,6 @@ namespace IMSBackend.Models
         [Required]
         public DateTime CreatedAt { get; set; }
 
-        public DateTime? UpdatedAt { get; set; }
-
         // Navigation property for orders
         public ICollection<Order> Orders { get; set; }
     }

@@ -1,33 +1,45 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Inventory } from './models'; // Assuming InventoryItem is defined in models.ts
 
 @Injectable({
   providedIn: 'root'
 })
 export class InventoryService {
-  private apiUrl = 'http://localhost:3000/api/inventory';
+  private apiUrl = 'http://localhost:40080/api/inventory';
 
   constructor(private http: HttpClient) { }
 
-  getInventory(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  // Fetch all inventory items
+  getInventory(): Observable<Inventory[]> {
+    return this.http.get<Inventory[]>(this.apiUrl);
   }
 
-  getInventoryById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  // Fetch a single inventory item by ID
+  getInventoryById(id: number): Observable<Inventory> {
+    return this.http.get<Inventory>(`${this.apiUrl}/${id}`);
   }
 
-  addInventory(item: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, item);
+  // Add a new inventory item
+  addInventory(item: Inventory): Observable<Inventory> {
+    return this.http.post<Inventory>(this.apiUrl, item);
   }
 
-  updateInventory(id: number, item: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, item);
+  // Update an existing inventory item by ID
+  updateInventory(id: number, item: Inventory): Observable<Inventory> {
+    return this.http.put<Inventory>(`${this.apiUrl}/${id}`, item);
   }
 
-  deleteInventory(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  // Delete an inventory item by ID
+  deleteInventory(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // Delete an inventory item by Part Number (assuming the backend supports this)
+  deleteInventoryByPartNumber(partNumber: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/part-number/${partNumber}`);
   }
 }
+
 

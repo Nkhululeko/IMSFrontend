@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { InventoryService } from '../inventory.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-remove-inventory',
@@ -11,22 +11,27 @@ export class RemoveInventoryComponent {
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
-  constructor(private inventoryService: InventoryService) { }
+  constructor(private http: HttpClient) { }
 
   onDelete(): void {
+    this.successMessage = null;
+    this.errorMessage = null;
+
     if (this.partNumber) {
-      this.inventoryService['deleteInventoryByPartNumber'](this.partNumber).subscribe(
-        (response: any) => {
-          this.successMessage = 'Inventory item removed successfully.';
-          this.errorMessage = null;
-          this.partNumber = ''; // Clear input field
+      this.http.delete(`http://localhost:40080/api/inventory/${this.partNumber}`).subscribe(
+        () => {
+          this.successMessage = `Part ${this.partNumber} removed successfully.`;
+          this.errorMessage = '';
+          this.partNumber = ''; // Reset the input field
         },
-        (error: any) => {
-          this.errorMessage = 'Failed to remove inventory item.';
-          this.successMessage = null;
+        error => {
+          console.error('Error removing item', error);
+          this.errorMessage = `Failed to remove part ${this.partNumber}.`;
+          this.successMessage = '';
         }
       );
     }
   }
 }
+
 

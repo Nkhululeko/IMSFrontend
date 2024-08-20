@@ -8,7 +8,7 @@ import { UserService } from '../user.service';
 })
 export class UserManagementComponent implements OnInit {
   users: any[] = [];
-  displayedColumns: string[] = ['position', 'name'];
+  displayedColumns: string[] = ['username', 'email', 'role', 'action'];
 
   // Example data source; replace with actual data source
   dataSource = this.users;

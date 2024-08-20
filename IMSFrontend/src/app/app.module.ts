@@ -1,6 +1,5 @@
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-// src/app/app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +17,7 @@ import { LoginComponent } from '../login/login.component';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { InventoryListComponent } from '../inventory-list/inventory-list.component';
 import { AddEditInventoryComponent } from '../add-edit-inventory/add-edit-inventory.component';
+import { RemoveInventoryComponent } from '../remove-inventory/remove-inventory.component';
 import { OrderManagementComponent } from '../order-management/order-management.component';
 import { ReportsComponent } from '../reports/reports.component';
 import { UserManagementComponent } from '../user-management/user-management.component';
@@ -29,6 +29,7 @@ import { UserManagementComponent } from '../user-management/user-management.comp
     DashboardComponent,
     InventoryListComponent,
     AddEditInventoryComponent,
+    RemoveInventoryComponent,
     OrderManagementComponent,
     ReportsComponent,
     UserManagementComponent
@@ -45,7 +46,8 @@ import { UserManagementComponent } from '../user-management/user-management.comp
     MatSnackBarModule,
     MatListModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    MatFormFieldModule
   ],
   providers: [],
   bootstrap: [AppComponent]

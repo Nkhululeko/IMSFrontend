@@ -10,8 +10,8 @@ using IMSBackend.Models;
 
 namespace IMSBackend.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CustomersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -56,7 +56,7 @@ namespace IMSBackend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Email,Phone,Address,CreatedAt,UpdatedAt")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id,Name,Email,Phone,Address,CreatedAt")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace IMSBackend.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Phone,Address,CreatedAt,UpdatedAt")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,Phone,Address,CreatedAt")] Customer customer)
         {
             if (id != customer.Id)
             {
