@@ -3,15 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IMSBackend.Models
 {
-    public enum UserRole
-    {
-        Admin,
-        User
-    }
+    [Table("users")]
     public class User
     {
         [Key]
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -22,12 +18,14 @@ namespace IMSBackend.Models
         public string Password { get; set; }
 
         [Required]
-        [Column(TypeName = "enum('admin', 'user')")]
-        public UserRole Role { get; set; }
+        [StringLength(20)]
+        public string Role { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }
 
-        public DateTime? UpdatedAt { get; set; }
+        // Navigation property for logs
+        public ICollection<Log> Logs { get; set; }
     }
 }
+

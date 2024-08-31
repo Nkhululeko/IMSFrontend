@@ -1,22 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IMSBackend.Models
 {
+    [Table("logs")]
     public class Log
     {
         [Key]
-        public int Id { get; set; }
+        public int LogId { get; set; }
 
         [Required]
         [StringLength(255)]
         public string Action { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
-        public DateTime Timestamp { get; set; }
+        [Column(TypeName = "time")]
+        public TimeSpan Timestamp { get; set; }
 
-        // Navigation property (optional)
+        [ForeignKey("UserId")]
         public User User { get; set; }
     }
 }

@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IMSBackend.Data;
 using IMSBackend.Models;
 
 namespace IMSBackend.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class PromotionsController : Controller
+    [ApiController]
+    public class PromotionsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
@@ -21,139 +21,88 @@ namespace IMSBackend.Controllers
             _context = context;
         }
 
-        // GET: Promotions
-        public async Task<IActionResult> Index()
+        // GET: api/Promotions
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Promotion>>> GetPromotions()
         {
-            return View(await _context.Promotions.ToListAsync());
+            return await _context.Promotions.ToListAsync();
         }
 
-        // GET: Promotions/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/Promotions/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Promotion>> GetPromotion(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var promotion = await _context.Promotions.FindAsync(id);
 
-            var promotion = await _context.Promotions
-                .FirstOrDefaultAsync(m => m.Id == id);
             if (promotion == null)
             {
                 return NotFound();
             }
 
-            return View(promotion);
+            return promotion;
         }
 
-        // GET: Promotions/Create
-        public IActionResult Create()
+        // PUT: api/Promotions/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutPromotion(int id, Promotion promotion)
         {
-            return View();
-        }
-
-        // POST: Promotions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Code,Description,DiscountPercentage,StartDate,EndDate,CreatedAt,UpdatedAt")] Promotion promotion)
-        {
-            if (ModelState.IsValid)
+            if (id != promotion.PromotionId)
             {
-                _context.Add(promotion);
+                return BadRequest();
+            }
+
+            _context.Entry(promotion).State = EntityState.Modified;
+
+            try
+            {
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            return View(promotion);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PromotionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: Promotions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var promotion = await _context.Promotions.FindAsync(id);
-            if (promotion == null)
-            {
-                return NotFound();
-            }
-            return View(promotion);
-        }
-
-        // POST: Promotions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/Promotions
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Code,Description,DiscountPercentage,StartDate,EndDate,CreatedAt,UpdatedAt")] Promotion promotion)
+        public async Task<ActionResult<Promotion>> PostPromotion(Promotion promotion)
         {
-            if (id != promotion.Id)
-            {
-                return NotFound();
-            }
+            _context.Promotions.Add(promotion);
+            await _context.SaveChangesAsync();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(promotion);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PromotionExists(promotion.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(promotion);
+            return CreatedAtAction("GetPromotion", new { id = promotion.PromotionId }, promotion);
         }
 
-        // GET: Promotions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/Promotions/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePromotion(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var promotion = await _context.Promotions
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var promotion = await _context.Promotions.FindAsync(id);
             if (promotion == null)
             {
                 return NotFound();
             }
 
-            return View(promotion);
-        }
-
-        // POST: Promotions/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var promotion = await _context.Promotions.FindAsync(id);
-            if (promotion != null)
-            {
-                _context.Promotions.Remove(promotion);
-            }
-
+            _context.Promotions.Remove(promotion);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool PromotionExists(int id)
         {
-            return _context.Promotions.Any(e => e.Id == id);
+            return _context.Promotions.Any(e => e.PromotionId == id);
         }
     }
 }

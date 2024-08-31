@@ -1,34 +1,31 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IMSBackend.Models
 {
-    public enum MovementType
-    {
-        Addition,
-        Removal
-    }
+    [Table("stock_movements")]
     public class StockMovement
     {
         [Key]
         public int Id { get; set; }
 
-        [Required]
         public int InventoryId { get; set; }
 
-        [ForeignKey("InventoryId")]
-        public InventoryItem InventoryItem { get; set; }
-
         [Required]
-        [Column(TypeName = "enum('addition', 'removal')")]
-        public MovementType MovementType { get; set; }
+        [StringLength(20)]
+        public string MovementType { get; set; }
 
         [Required]
         public int Quantity { get; set; }
 
-        [Required]
+        [Column(TypeName = "datetime2")]
         public DateTime MovementDate { get; set; }
 
+        [StringLength(70)]
         public string Reason { get; set; }
+
+        [ForeignKey("InventoryId")]
+        public InventoryItem InventoryItem { get; set; }
     }
 }
+

@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IMSBackend.Data;
 using IMSBackend.Models;
 
 namespace IMSBackend.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class StockMovementsController : Controller
+    [ApiController]
+    public class StockMovementsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
@@ -21,141 +21,83 @@ namespace IMSBackend.Controllers
             _context = context;
         }
 
-        // GET: StockMovements
-        public async Task<IActionResult> Index()
+        // GET: api/StockMovements
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StockMovement>>> GetStockMovements()
         {
-            var applicationDbContext = _context.StockMovements.Include(s => s.InventoryItem);
-            return View(await applicationDbContext.ToListAsync());
+            return await _context.StockMovements.ToListAsync();
         }
 
-        // GET: StockMovements/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/StockMovements/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<StockMovement>> GetStockMovement(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var stockMovement = await _context.StockMovements
-                .Include(s => s.InventoryItem)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (stockMovement == null)
-            {
-                return NotFound();
-            }
-
-            return View(stockMovement);
-        }
-
-        // GET: StockMovements/Create
-        public IActionResult Create()
-        {
-            ViewData["InventoryId"] = new SelectList(_context.InventoryItems, "Id", "PartName");
-            return View();
-        }
-
-        // POST: StockMovements/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,InventoryId,MovementType,Quantity,MovementDate,Reason")] StockMovement stockMovement)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(stockMovement);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["InventoryId"] = new SelectList(_context.InventoryItems, "Id", "PartName", stockMovement.InventoryId);
-            return View(stockMovement);
-        }
-
-        // GET: StockMovements/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var stockMovement = await _context.StockMovements.FindAsync(id);
+
             if (stockMovement == null)
             {
                 return NotFound();
             }
-            ViewData["InventoryId"] = new SelectList(_context.InventoryItems, "Id", "PartName", stockMovement.InventoryId);
-            return View(stockMovement);
+
+            return stockMovement;
         }
 
-        // POST: StockMovements/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,InventoryId,MovementType,Quantity,MovementDate,Reason")] StockMovement stockMovement)
+        // PUT: api/StockMovements/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutStockMovement(int id, StockMovement stockMovement)
         {
             if (id != stockMovement.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
 
-            if (ModelState.IsValid)
+            _context.Entry(stockMovement).State = EntityState.Modified;
+
+            try
             {
-                try
-                {
-                    _context.Update(stockMovement);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StockMovementExists(stockMovement.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
             }
-            ViewData["InventoryId"] = new SelectList(_context.InventoryItems, "Id", "PartName", stockMovement.InventoryId);
-            return View(stockMovement);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!StockMovementExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: StockMovements/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // POST: api/StockMovements
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<StockMovement>> PostStockMovement(StockMovement stockMovement)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            _context.StockMovements.Add(stockMovement);
+            await _context.SaveChangesAsync();
 
-            var stockMovement = await _context.StockMovements
-                .Include(s => s.InventoryItem)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            return CreatedAtAction("GetStockMovement", new { id = stockMovement.Id }, stockMovement);
+        }
+
+        // DELETE: api/StockMovements/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteStockMovement(int id)
+        {
+            var stockMovement = await _context.StockMovements.FindAsync(id);
             if (stockMovement == null)
             {
                 return NotFound();
             }
 
-            return View(stockMovement);
-        }
-
-        // POST: StockMovements/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var stockMovement = await _context.StockMovements.FindAsync(id);
-            if (stockMovement != null)
-            {
-                _context.StockMovements.Remove(stockMovement);
-            }
-
+            _context.StockMovements.Remove(stockMovement);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool StockMovementExists(int id)

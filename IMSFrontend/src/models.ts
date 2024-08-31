@@ -27,17 +27,6 @@ export interface OrderDetail {
   price: number;
 }
 
-// Inventory Model
-export interface Inventory {
-  id: number;
-  part_name: string;
-  part_number: string;
-  quantity: number;
-  price: number;
-  supplier_id: number;
-  category_id: number;
-  created_at: Date;
-}
 
 // Supplier Model
 export interface Supplier {

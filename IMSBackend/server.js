@@ -1,17 +1,21 @@
 const express = require('express');
-const mysql = require('mysql2');
+const mysql = require('mssql');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = 40443;
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
+const dbConfig = {
+    user: 'NKHULULEKO',
     password: 'nkhulu22',
-    database: 'car_parts_business_db'
-});
+    server: 'NKHULULEKO//SQLEXPRESS', // Update with your server name or IP
+    database: 'car_parts_business_db',
+    options: {
+        encrypt: true, // Use this if you're on Azure or need encryption
+        trustServerCertificate: true // Change this to true for local development
+    }
+};
 
 db.connect(err => {
     if (err) throw err;

@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IMSBackend.Data;
 using IMSBackend.Models;
 
 namespace IMSBackend.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
-    public class OrderDetailsController : Controller
+    [ApiController]
+    public class OrderDetailsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
@@ -21,152 +21,88 @@ namespace IMSBackend.Controllers
             _context = context;
         }
 
-        // GET: OrderDetails
-        public async Task<IActionResult> Index()
+        // GET: api/OrderDetails
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderDetail>>> GetOrderDetails()
         {
-            var applicationDbContext = _context.OrderDetails.Include(o => o.InventoryItem).Include(o => o.Order);
-            return View(await applicationDbContext.ToListAsync());
+            return await _context.OrderDetails.ToListAsync();
         }
 
-        // GET: OrderDetails/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: api/OrderDetails/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<OrderDetail>> GetOrderDetail(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            var orderDetail = await _context.OrderDetails.FindAsync(id);
 
-            var orderDetail = await _context.OrderDetails
-                .Include(o => o.InventoryItem)
-                .Include(o => o.Order)
-                .FirstOrDefaultAsync(m => m.Id == id);
             if (orderDetail == null)
             {
                 return NotFound();
             }
 
-            return View(orderDetail);
+            return orderDetail;
         }
 
-        // GET: OrderDetails/Create
-        public IActionResult Create()
+        // PUT: api/OrderDetails/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutOrderDetail(int id, OrderDetail orderDetail)
         {
-            ViewData["InventoryId"] = new SelectList(_context.InventoryItems, "Id", "PartName");
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id");
-            return View();
-        }
-
-        // POST: OrderDetails/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OrderId,InventoryId,Quantity,Price")] OrderDetail orderDetail)
-        {
-            if (ModelState.IsValid)
+            if (id != orderDetail.OrderDetailId)
             {
-                _context.Add(orderDetail);
+                return BadRequest();
+            }
+
+            _context.Entry(orderDetail).State = EntityState.Modified;
+
+            try
+            {
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["InventoryId"] = new SelectList(_context.InventoryItems, "Id", "PartName", orderDetail.InventoryId);
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", orderDetail.OrderId);
-            return View(orderDetail);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderDetailExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
 
-        // GET: OrderDetails/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var orderDetail = await _context.OrderDetails.FindAsync(id);
-            if (orderDetail == null)
-            {
-                return NotFound();
-            }
-            ViewData["InventoryId"] = new SelectList(_context.InventoryItems, "Id", "PartName", orderDetail.InventoryId);
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", orderDetail.OrderId);
-            return View(orderDetail);
-        }
-
-        // POST: OrderDetails/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: api/OrderDetails
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderId,InventoryId,Quantity,Price")] OrderDetail orderDetail)
+        public async Task<ActionResult<OrderDetail>> PostOrderDetail(OrderDetail orderDetail)
         {
-            if (id != orderDetail.Id)
-            {
-                return NotFound();
-            }
+            _context.OrderDetails.Add(orderDetail);
+            await _context.SaveChangesAsync();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(orderDetail);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrderDetailExists(orderDetail.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["InventoryId"] = new SelectList(_context.InventoryItems, "Id", "PartName", orderDetail.InventoryId);
-            ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", orderDetail.OrderId);
-            return View(orderDetail);
+            return CreatedAtAction("GetOrderDetail", new { id = orderDetail.OrderDetailId }, orderDetail);
         }
 
-        // GET: OrderDetails/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // DELETE: api/OrderDetails/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrderDetail(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var orderDetail = await _context.OrderDetails
-                .Include(o => o.InventoryItem)
-                .Include(o => o.Order)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var orderDetail = await _context.OrderDetails.FindAsync(id);
             if (orderDetail == null)
             {
                 return NotFound();
             }
 
-            return View(orderDetail);
-        }
-
-        // POST: OrderDetails/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var orderDetail = await _context.OrderDetails.FindAsync(id);
-            if (orderDetail != null)
-            {
-                _context.OrderDetails.Remove(orderDetail);
-            }
-
+            _context.OrderDetails.Remove(orderDetail);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return NoContent();
         }
 
         private bool OrderDetailExists(int id)
         {
-            return _context.OrderDetails.Any(e => e.Id == id);
+            return _context.OrderDetails.Any(e => e.OrderDetailId == id);
         }
     }
 }

@@ -10,6 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { AngularMaterialModule } from '../angular-material.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +22,7 @@ import { RemoveInventoryComponent } from '../remove-inventory/remove-inventory.c
 import { OrderManagementComponent } from '../order-management/order-management.component';
 import { ReportsComponent } from '../reports/reports.component';
 import { UserManagementComponent } from '../user-management/user-management.component';
+import { NavMenuComponent } from '../nav-menu/nav-menu.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { UserManagementComponent } from '../user-management/user-management.comp
     RemoveInventoryComponent,
     OrderManagementComponent,
     ReportsComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    NavMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,8 @@ import { UserManagementComponent } from '../user-management/user-management.comp
     MatListModule,
     MatIconModule,
     MatTableModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    AngularMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]

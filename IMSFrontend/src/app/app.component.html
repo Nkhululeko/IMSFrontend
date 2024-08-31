@@ -1,13 +1,4 @@
-<nav class="navbar">
-  <ul class="nav-list">
-    <li><a routerLink="/login" routerLinkActive="active">Login</a></li>
-    <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
-    <li><a routerLink="/inventory-list" routerLinkActive="active">Inventory List</a></li>
-    <li><a routerLink="/add-edit-inventory" routerLinkActive="active">Add/Edit Inventory</a></li>
-    <li><a routerLink="/remove-inventory" routerLinkActive="active">Remove Inventory</a></li>
-    <li><a routerLink="/order-management" routerLinkActive="active">Order Management</a></li>
-    <li><a routerLink="/reports" routerLinkActive="active">Reports</a></li>
-    <li><a routerLink="/user-management" routerLinkActive="active">User Management</a></li>
-  </ul>
-</nav>
-<router-outlet></router-outlet>
+<app-nav-menu></app-nav-menu>
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

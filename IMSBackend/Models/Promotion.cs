@@ -1,33 +1,29 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IMSBackend.Models
 {
+    [Table("promotions")]
     public class Promotion
     {
         [Key]
-        public int Id { get; set; }
+        public int PromotionId { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string Code { get; set; }
 
+        [StringLength(50)]
         public string Description { get; set; }
 
-        [Required]
-        [Range(0, 100)]
         [Column(TypeName = "decimal(5,2)")]
         public decimal DiscountPercentage { get; set; }
 
-        [Required]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        [Required]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
     }
 }
+
